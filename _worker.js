@@ -13,8 +13,8 @@ let userID = '89b3cbba-e6ac-485a-9481-976a0415eab9';
 // https://www.nslookup.io/domains/cdn-all.xn--b6gac.eu.org/dns-records/
 const proxyIPs= ['cdn.xn--b6gac.eu.org', 'cdn-all.xn--b6gac.eu.org', 'edgetunnel.anycast.eu.org'];
 
-const defaultHttpPorts = ['80', '8080', '2052', '2082', '2086', '2095', '8880'];
-const defaultHttpsPorts = ['443', '8443', '2053', '2083', '2087', '2096'];
+const defaultHttpPorts = ['80', '8080', '2052', '2082', '2086', '2095', '8880']; 
+const defaultHttpsPorts = ['443', '8443', '2053', '2083', '2087', '2096']; 
 
 let proxyIP = proxyIPs[Math.floor(Math.random() * proxyIPs.length)];
 
@@ -31,7 +31,7 @@ export default {
      * @param {import("@cloudflare/workers-types").Request} request
      * @param {{UUID: string, PROXYIP: string, DNS_RESOLVER_URL: string}} env
      * @param {import("@cloudflare/workers-types").ExecutionContext} ctx
-     * @returns {Promise<Response>}
+     * @returns {Promise<Response>} 
      */
     async fetch(request, env, ctx) {
         try {
@@ -69,7 +69,7 @@ export default {
 
                     case `/fragsub/${userID}`:
 
-                        let fragConfigs = await getFragmentConfigs(env, host, 'v2ray');
+                        let fragConfigs = await getFragmentConfigs(env, host, 'v2ray'); 
                         fragConfigs = fragConfigs.map(config => config.config);
 
                         return new Response(`${JSON.stringify(fragConfigs, null, 4)}`, { status: 200 });
@@ -156,7 +156,7 @@ export default {
                             }
                         }
                         
-                        const loginPage = await renderLoginPage();
+                        const loginPage = await renderLoginPage(); 
 
                         return new Response(loginPage, {
                             status: 200,
@@ -184,13 +184,13 @@ export default {
                     case '/panel/password':
 
                         let passAuth = await Authenticate(request, env);
-                        if (!passAuth) return new Response('Unauthorized!', { status: 401 });           
+                        if (!passAuth) return new Response('Unauthorized!', { status: 401 });            
                         const newPwd = await request.text();
                         const oldPwd = await env.bpb.get('pwd');
                         if (newPwd === oldPwd) return new Response('Please enter a new Password!', { status: 400 });
                         await env.bpb.put('pwd', newPwd);
 
-                        return new Response('Success', {
+                        return new Response('Success', { 
                             status: 200,
                             headers: {
                                 'Set-Cookie': 'jwtToken=; Path=/; Secure; SameSite=None; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
@@ -199,10 +199,10 @@ export default {
                         });
 
                     default:
-                        // return new Response('Not found', { status: 404 });
+                        return new Response('Not found', { status: 404 });
                         url.hostname = 'www.speedtest.net';
                         url.protocol = 'https:';
-                        request = new Request(url, request);
+                        request = new Request(url, request); 
                         return await fetch(request);
                 }
             } else {
@@ -234,7 +234,7 @@ async function vlessOverWSHandler(request) {
 	};
 	const earlyDataHeader = request.headers.get('sec-websocket-protocol') || '';
 
-	const readableWebSocketStream = makeReadableWebSocketStream(webSocket, earlyDataHeader, log);
+	const readableWebSocketStream = makeReadableWebSocketStream(webSocket, earlyDataHeader, log); 
 
 	/** @type {{ value: import("@cloudflare/workers-types").Socket | null}}*/
 	let remoteSocketWapper = {
